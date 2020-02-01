@@ -2,7 +2,7 @@ package main
 
 import (
 	"bufio"
-	"fmt"
+	"github.com/johnnylei/go-cache-sever/cache"
 	"io"
 	"net"
 	"strconv"
@@ -11,12 +11,12 @@ import (
 
 func NewTcpServer() *TcpServer  {
 	return &TcpServer{
-		cache:NewCache(),
+		cache:cache.NewCache(),
 	}
 }
 
 type TcpServer struct {
-	cache *Cache
+	cache *cache.Cache
 }
 
 func (_self *TcpServer)Run(address string) error  {
