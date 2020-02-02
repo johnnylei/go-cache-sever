@@ -9,14 +9,22 @@ import (
 	"strings"
 )
 
-func NewTcpServer() *TcpServer  {
+func NewTcpServer(t string) *TcpServer  {
+	m := map[string]func()cache.CacheInterface{
+		"default": func() cache.CacheInterface {
+			return cache.NewCache()
+		},
+		"rocksdb": func() cache.CacheInterface {
+			return cache.NewRocksdbCache()
+		},
+	}
 	return &TcpServer{
-		cache:cache.NewCache(),
+		m[t](),
 	}
 }
 
 type TcpServer struct {
-	cache *cache.Cache
+	cache cache.CacheInterface
 }
 
 func (_self *TcpServer)Run(address string) error  {
