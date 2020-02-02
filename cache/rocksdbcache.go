@@ -1,6 +1,7 @@
 package cache
 
-// #include "rocksdb.h"
+// #include "rocksdb/c.h"
+// #include <stdlib.h>
 // #cgo CFLAGS: -I/root/programs/rocksdb-5.11.2/include
 // #cgo LDFLAGS: -L/root/programs/rocksdb-5.11.2 -lrocksdb -lz -lpthread -lsnappy -lstdc++ -lm -O3
 import "C"
@@ -67,7 +68,7 @@ func (_self *rocksdbCache)Set(key string, value []byte) error  {
 	v := C.CBytes(value)
 	defer C.free(unsafe.Pointer(v))
 
-	C.rocksdb_put(_self.db, _self.wo, k, C.size_z(len(key)), (*C.char)(v), C.size_z(len(value)), &_self.e)
+	C.rocksdb_put(_self.db, _self.wo, k, C.size_t(len(key)), (*C.char)(v), C.size_t(len(value)), &_self.e)
 	if _self.e != nil {
 		return errors.New(C.GoString(_self.e))
 	}
